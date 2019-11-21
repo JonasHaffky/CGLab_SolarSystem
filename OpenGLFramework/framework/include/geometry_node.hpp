@@ -1,15 +1,16 @@
 #ifndef GEOMETRY_NODE_HPP
 #define GEOMETRY_NODE_HPP
+#include <node.hpp>
+#include <model.hpp>
 
-#include <OpenGLFramework/framework/include/model.hpp>
-
-class GeometryNode : public Node {
+class GeometryNode : Node {
 	public:
-		GeometryNode(){};
-		model::model getGeometry();
-		void setGeometry(model::model const& model);
+		GeometryNode();
+		model getGeometry();
+		void setGeometry(model const& model);
 
 	private:
-		model::model geometry_;
+		model geometry_;
 
-}
+};
+#endif

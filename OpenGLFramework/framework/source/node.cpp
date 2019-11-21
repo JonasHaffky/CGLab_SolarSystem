@@ -3,67 +3,75 @@
 #include <iostream>
 
 
-Node node::getParent(){
+Node::Node() : 
+	parent_{}, children_{}, name_{}, path_{}, depth_{}, localTransform_{}, worldTransform_{} {}
+
+
+std::shared_ptr<Node> Node::getParent(){
 	return parent_;
 }
 
-void node::setParent(Node* parent){
+void Node::setParent(std::shared_ptr<Node> const& parent){
 	parent_ = parent;
 }
 
-std::vector<std::shared_ptr<Node>> const& node::getChildrenList(){
+std::vector<std::shared_ptr<Node>> const& Node::getChildrenList(){
 	return children_;
 }
 
 //What is this for? What should be returned?
-Node const& node::getChildren(std::string name){
-
+std::shared_ptr<Node> const& Node::getChild(std::string name){
+	for (auto const& child : getChildrenList()) {
+		if (child->getName() == name){
+			return child;
+		}
+	}
+	return nullptr;
 }
 
-std::string const& node::getName(){
+std::string Node::getName() const{
 	return name_;
 }
 
-std::string const& node::getPath(){
-
+std::string Node::getPath() const{
+	return path_;
 }
 
-int node::getDepth(){
-
+int Node::getDepth() const{
+	return depth_;
 }
 
-glm::mat4 node::getLocalTransform() const{
+glm::mat4 Node::getLocalTransform() const{
 	return localTransform_;
 }
 
-void node::setLocalTransform(glm::mat4 const% transform){
-	transform_ = transform;
+void Node::setLocalTransform(glm::mat4 const& transform){
+	localTransform_ = transform;
 }
 
-glm::mat4 node::getWorldTransform() const{
+glm::mat4 Node::getWorldTransform(){
 	return worldTransform_;
 }
 
-void node::setWorldTransform(glm::mat4 const% transform){
-	transform_ = transform;
+void Node::setWorldTransform(glm::mat4 const& transform){
+	worldTransform_ = transform;
 }
 
 //adding more children? addChild?
-void node::addChildren(std::shared_ptr<Node> const& node){
-	//checking what exactly i do here
-	auto new_child(std::make_shared<T>(node));
-	return add_child(new_child);
+void Node::addChild(std::shared_ptr<Node> const& node){
+	children_.push_back(node);
 }
 
 //removing all children or one? why give back node?
-std::shared_ptr<Node> node::removeChildren(std::string const& node){
-	for(auto child(children_.begin()); child != children_.end(); ++child) {
-		if (*child == node) {
-			children_.erase(child);
-			node->parent_ = nullptr;
-			//not sure what to do next 
-			break;
+std::shared_ptr<Node> Node::removeChild(std::string const& name){
+	int i = 0;
+	for (auto const& child : getChildrenList()) {
+		if (child->getName() == name){
+			return child;
+			children_.erase(children_.begin()+i);
 		}
+		++i;
 	}
+	return nullptr;
 }
 
