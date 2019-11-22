@@ -4,7 +4,22 @@
 
 
 Node::Node() : 
-	parent_{}, children_{}, name_{}, path_{}, depth_{}, localTransform_{}, worldTransform_{} {}
+	parent_{},
+	children_{},
+	name_{},
+	path_{},
+	depth_{},
+	localTransform_{},
+	worldTransform_{} {}
+
+Node::Node(std::shared_ptr<Node> const& parent, std::string const& name, std::string const& path, int depth) : 
+	parent_{parent},
+	children_{},
+	name_{name},
+	path_{path},
+	depth_{depth},
+	localTransform_{1.0f},
+	worldTransform_{1.0f} {}
 
 
 std::shared_ptr<Node> Node::getParent(){

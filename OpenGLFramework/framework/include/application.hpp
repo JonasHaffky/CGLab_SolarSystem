@@ -2,10 +2,11 @@
 #define APPLICATION_HPP
 
 #include "structs.hpp"
-
 #include <glm/gtc/type_precision.hpp>
-
 #include <map>
+#include "scene_graph.hpp"
+
+
 
 struct GLFWwindow;
 // gpu representation of model

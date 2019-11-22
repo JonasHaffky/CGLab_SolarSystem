@@ -8,6 +8,7 @@
 class Node {
 public:
 	Node();
+	Node(std::shared_ptr<Node> const& parent, std::string const& name, std::string const& path, int depth);
 	virtual ~Node() = default;
 
 	std::shared_ptr<Node> getParent();

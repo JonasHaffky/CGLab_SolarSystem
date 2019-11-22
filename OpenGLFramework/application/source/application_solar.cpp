@@ -36,6 +36,7 @@ ApplicationSolar::~ApplicationSolar() {
 }
 
 void ApplicationSolar::render() const {
+  /***
   // bind shader to upload uniforms
   glUseProgram(m_shaders.at("planet").handle);
 
@@ -53,7 +54,57 @@ void ApplicationSolar::render() const {
   glBindVertexArray(planet_object.vertex_AO);
 
   // draw bound vertex array using bound shader
+  glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL); 
+  ***/
+  glUseProgram(m_shaders.at("planet").handle);
+  createPlanetSystem();
+
+}
+
+void ApplicationSolar::createPlanetSystem() const{
+
+  std::cout<<"1"<<std::endl;
+  // we load a circular model from the resources
+  model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
+  
+  std::cout<<"2"<<std::endl;
+  // creating an empty root node with nullptr as parent, named /, path / and 0 depth
+  Node root {nullptr, "/", "/",0};
+  auto root_pointer = std::make_shared<Node>(root);
+
+  std::cout<<"3"<<std::endl;
+  //Creating our first star -> the sun! And adding to the root
+  GeometryNode sun{root_pointer, "sun", "/sun", 1};
+  
+
+  sun.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  sun.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 1.0f});
+
+  auto sun_pointer = std::make_shared<GeometryNode>(sun);
+ 
+  glm::fmat4 model_matrix = glm::fmat4{1.0};
+  model_matrix = glm::rotate(model_matrix * sun_pointer->getLocalTransform(),float(glfwGetTime()), glm::fvec3{0.0f, 20.0f, 0.0f});
+  model_matrix = glm::translate(model_matrix, glm::fvec3{1.0f, 0.0f, -1.0f});;
+
+  std::cout<<"5"<<std::endl;
+  // extra matrix for normal transformation to keep them orthogonal to surface
+  glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
+  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
+                     1, GL_FALSE, glm::value_ptr(model_matrix));
+
+  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
+                     1, GL_FALSE, glm::value_ptr(normal_matrix));
+
+  // bind the VAO to draw
+  glBindVertexArray(planet_object.vertex_AO);
+
+  // draw bound vertex array using bound shader
   glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+
 }
 
 void ApplicationSolar::uploadView() {

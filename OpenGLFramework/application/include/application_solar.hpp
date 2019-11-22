@@ -4,6 +4,8 @@
 #include "application.hpp"
 #include "model.hpp"
 #include "structs.hpp"
+#include "geometry_node.hpp"
+#include "node.hpp"
 
 // gpu representation of model
 class ApplicationSolar : public Application {
@@ -23,6 +25,9 @@ class ApplicationSolar : public Application {
   // draw all objects
   void render() const;
 
+  // Function that creates planets (by hand)
+  void createPlanetSystem() const;
+
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
@@ -33,12 +38,11 @@ class ApplicationSolar : public Application {
   // upload view matrix
   void uploadView();
 
-  // cpu representation of model
-  model_object planet_object;
 
   // cpu representation of model
-  model_object planet_object2;
+  model_object planet_object;
   
+
   // camera transform matrix
   glm::fmat4 m_view_transform;
   // camera projection matrix
