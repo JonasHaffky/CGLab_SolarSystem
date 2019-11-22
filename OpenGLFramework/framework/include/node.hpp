@@ -8,7 +8,7 @@
 class Node {
 public:
 	Node();
-	Node(std::shared_ptr<Node> const& parent, std::string const& name, std::string const& path, int depth);
+	Node(std::shared_ptr<Node> const& parent, std::string const& name);
 	virtual ~Node() = default;
 
 	std::shared_ptr<Node> getParent();
@@ -28,7 +28,7 @@ public:
 	void addChild(std::shared_ptr<Node> const& node);
 	//removing one child
 	std::shared_ptr<Node> removeChild(std::string const& node);
-
+	bool hasChild(std::string const& name);
 
 private:
 	std::shared_ptr<Node> parent_;

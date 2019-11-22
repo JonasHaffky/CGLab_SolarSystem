@@ -12,14 +12,25 @@ Node::Node() :
 	localTransform_{},
 	worldTransform_{} {}
 
-Node::Node(std::shared_ptr<Node> const& parent, std::string const& name, std::string const& path, int depth) : 
+Node::Node(std::shared_ptr<Node> const& parent, std::string const& name) : 
 	parent_{parent},
 	children_{},
 	name_{name},
-	path_{path},
-	depth_{depth},
+	path_{},
+	depth_{},
 	localTransform_{1.0f},
-	worldTransform_{1.0f} {}
+	worldTransform_{1.0f} {
+		if (parent != nullptr) {
+			parent_->addChild(std::make_shared<Node>(*this));
+			depth_ = parent_->getDepth()+1;
+			path_ = path_+"/"+name;
+			}
+		else {
+			path_ = "/";
+			depth_ = 0;
+		}
+
+	}
 
 
 std::shared_ptr<Node> Node::getParent(){
@@ -88,5 +99,15 @@ std::shared_ptr<Node> Node::removeChild(std::string const& name){
 		++i;
 	}
 	return nullptr;
+}
+
+//removing all children or one? why give back node?
+bool Node::hasChild(std::string const& name){
+	for (auto const& child : getChildrenList()) {
+		if (child->getName() == name){
+			return true;
+		}
+	}
+	return false;
 }
 

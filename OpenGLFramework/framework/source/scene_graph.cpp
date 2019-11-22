@@ -1,16 +1,17 @@
 #include <scene_graph.hpp>
 
-
-SceneGraph* SceneGraph::getInstance() {
+/**
+SceneGraph* SceneGraph::getInstance(std::string name, std::shared_ptr<Node> root) {
 	if (!scene_graph_instance_) {
-		scene_graph_instance_ = new SceneGraph;
+		scene_graph_instance_ = new SceneGraph(name, root);
 	}
 	return scene_graph_instance_;
 }
+**/
 
-SceneGraph::SceneGraph(): 
-	name_{"default name"},
-	root_{} {}
+SceneGraph::SceneGraph(std::string name, std::shared_ptr<Node> root): 
+	name_{name},
+	root_{root} {}
 
 SceneGraph::~SceneGraph(){}
 
@@ -34,21 +35,19 @@ void SceneGraph::printGraph(){
 
 	std::shared_ptr<Node> root = getRoot();
 	int depth = root->getDepth();
-
+	std::cout<<root->getName()<< " has kids: "<< root->getChildrenList().size() <<std::endl;
 	graphPrinter(root, depth);
-
 }
 
-void graphPrinter(std::shared_ptr<Node> const& node, int depth) {
+void SceneGraph::graphPrinter(std::shared_ptr<Node> const& node, int depth) {
 	//creating emptyspace, depending on depth
 	for (int index = 0; index < depth; ++index) {
 		std::cout<<" ";
-
 	}
+
 	std::cout<<node->getName()<<std::endl;
-	auto childrenlist = node->getChildrenList();
-	for (auto const& child : childrenlist) {
-		graphPrinter(child, child->getDepth());
+	for (auto const& child : node->getChildrenList()) {
+		graphPrinter(child, depth+1);
 	}
 
 }
