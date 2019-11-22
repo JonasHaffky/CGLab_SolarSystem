@@ -57,11 +57,12 @@ void ApplicationSolar::render() const {
   glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL); 
   ***/
   glUseProgram(m_shaders.at("planet").handle);
-  createPlanetSystem();
+  createPlanet(glm::fvec3{0.0f, 1.0f, 0.0f});
+  createPlanet(glm::fvec3{1.0f, 0.0f, 0.0f});
 
 }
 
-void ApplicationSolar::createPlanetSystem() const{
+void ApplicationSolar::createPlanet(glm::fvec3 rotation) const{
 
   std::cout<<"1"<<std::endl;
   // we load a circular model from the resources
@@ -87,7 +88,7 @@ void ApplicationSolar::createPlanetSystem() const{
   auto sun_pointer = std::make_shared<GeometryNode>(sun);
  
   glm::fmat4 model_matrix = glm::fmat4{1.0};
-  model_matrix = glm::rotate(model_matrix * sun_pointer->getLocalTransform(),float(glfwGetTime()), glm::fvec3{0.0f, 20.0f, 0.0f});
+  model_matrix = glm::rotate(model_matrix * sun_pointer->getLocalTransform(),float(glfwGetTime()),rotation);
   model_matrix = glm::translate(model_matrix, glm::fvec3{1.0f, 0.0f, -1.0f});;
 
   std::cout<<"5"<<std::endl;
