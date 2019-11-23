@@ -35,7 +35,7 @@ void SceneGraph::printGraph(){
 
 	std::shared_ptr<Node> root = getRoot();
 	int depth = root->getDepth();
-	std::cout<<root->getName()<< " has kids: "<< root->getChildrenList().size() <<std::endl;
+
 	graphPrinter(root, depth);
 }
 
@@ -46,6 +46,7 @@ void SceneGraph::graphPrinter(std::shared_ptr<Node> const& node, int depth) {
 	}
 
 	std::cout<<node->getName()<<std::endl;
+	
 	for (auto const& child : node->getChildrenList()) {
 		graphPrinter(child, depth+1);
 	}

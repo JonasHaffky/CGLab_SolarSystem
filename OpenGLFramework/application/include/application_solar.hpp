@@ -27,6 +27,7 @@ class ApplicationSolar : public Application {
 
   // Function that creates planets (by hand)
   void createPlanetSystem() const;
+  void drawGraph(std::shared_ptr<Node> node) const;
 
  protected:
   void initializeShaderPrograms();
@@ -37,6 +38,7 @@ class ApplicationSolar : public Application {
   void uploadProjection();
   // upload view matrix
   void uploadView();
+
 
 
   // cpu representation of model

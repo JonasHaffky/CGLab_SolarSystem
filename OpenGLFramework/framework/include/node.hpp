@@ -8,8 +8,9 @@
 class Node {
 public:
 	Node();
-	Node(std::shared_ptr<Node> const& parent, std::string const& name);
-	virtual ~Node() = default;
+	Node(std::shared_ptr<Node> parent, std::string const& name);
+	Node(std::shared_ptr<Node> parent, std::string const& name, int depth);
+
 
 	std::shared_ptr<Node> getParent();
 	void setParent(std::shared_ptr<Node> const& parent);
@@ -29,15 +30,18 @@ public:
 	//removing one child
 	std::shared_ptr<Node> removeChild(std::string const& node);
 	bool hasChild(std::string const& name);
+	void setPosition(glm::fvec3  const& position);
+	glm::fvec3 getPosition() const;
 
 private:
 	std::shared_ptr<Node> parent_;
 	std::vector<std::shared_ptr<Node>> children_;
 	std::string name_;
-	std::string path_;
 	int depth_;
+	std::string path_;
 	glm::mat4 localTransform_;
 	glm::mat4 worldTransform_{glm::mat4(1.0f)};
+	glm::fvec3 position_;
 
 };
 

@@ -7,27 +7,49 @@ Node::Node() :
 	parent_{},
 	children_{},
 	name_{},
-	path_{},
 	depth_{},
+	path_{},
 	localTransform_{},
-	worldTransform_{} {}
+	worldTransform_{},
+	position_ {} {}
 
-Node::Node(std::shared_ptr<Node> const& parent, std::string const& name) : 
+Node::Node(std::shared_ptr<Node> parent, std::string const& name) : 
 	parent_{parent},
 	children_{},
 	name_{name},
+	depth_{0},
 	path_{},
-	depth_{},
 	localTransform_{1.0f},
-	worldTransform_{1.0f} {
+	worldTransform_{1.0f},
+	position_{} {
 		if (parent != nullptr) {
-			parent_->addChild(std::make_shared<Node>(*this));
-			depth_ = parent_->getDepth()+1;
+			parent->addChild(std::make_shared<Node>(*this));
+			depth_ += 1;
 			path_ = path_+"/"+name;
 			}
 		else {
 			path_ = "/";
 			depth_ = 0;
+		}
+
+	}
+
+Node::Node(std::shared_ptr<Node> parent, std::string const& name, int depth) : 
+	parent_{parent},
+	children_{},
+	name_{name},
+	depth_{depth},
+	path_{},
+	localTransform_{1.0f},
+	worldTransform_{1.0f},
+	position_{} {
+		if (parent != nullptr) {
+			parent->addChild(std::make_shared<Node>(*this));
+			path_ = path_+"/"+name;
+			}
+		else {
+			path_ = "/";
+
 		}
 
 	}
@@ -111,3 +133,12 @@ bool Node::hasChild(std::string const& name){
 	return false;
 }
 
+void Node::setPosition(glm::fvec3 const& position){
+	position_ = position;
+}
+
+
+glm::fvec3 Node::getPosition() const{
+	return position_;
+
+}

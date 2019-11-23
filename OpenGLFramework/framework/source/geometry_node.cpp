@@ -5,6 +5,9 @@ GeometryNode::GeometryNode(){}
 GeometryNode::GeometryNode(std::shared_ptr<Node> const& parent, std::string const& name):
 	Node(parent, name) {}
 
+GeometryNode::GeometryNode(std::shared_ptr<Node> const& parent, std::string const& name, int depth):
+	Node(parent, name, depth) {}
+
 model GeometryNode::getGeometry(){
 	return geometry_;
 }
