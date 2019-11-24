@@ -1,4 +1,5 @@
 #include <scene_graph.hpp>
+#include <node.hpp>
 
 /**
 SceneGraph* SceneGraph::getInstance(std::string name, std::shared_ptr<Node> root) {
@@ -36,18 +37,18 @@ void SceneGraph::printGraph(){
 	std::shared_ptr<Node> root = getRoot();
 	int depth = root->getDepth();
 
+	//using a recusive function for traversing graph and print it
 	graphPrinter(root, depth);
 }
 
 void SceneGraph::graphPrinter(std::shared_ptr<Node> const& node, int depth) {
-	//creating emptyspace, depending on depth
+	//creating emptyspace, depending on depth of node
 	for (int index = 0; index < depth; ++index) {
 		std::cout<<" ";
 	}
 
 	std::cout<<node->getName()<<std::endl;
-	
-	for (auto const& child : node->getChildrenList()) {
+	for (std::shared_ptr<Node> const& child : node->getChildrenList()) {
 		graphPrinter(child, depth+1);
 	}
 

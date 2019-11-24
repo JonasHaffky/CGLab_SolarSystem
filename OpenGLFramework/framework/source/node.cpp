@@ -11,21 +11,22 @@ Node::Node() :
 	path_{},
 	localTransform_{},
 	worldTransform_{},
-	position_ {} {}
+	position_ {},
+	speed_{} {}
 
 Node::Node(std::shared_ptr<Node> parent, std::string const& name) : 
 	parent_{parent},
 	children_{},
 	name_{name},
-	depth_{0},
+	depth_{},
 	path_{},
 	localTransform_{1.0f},
 	worldTransform_{1.0f},
-	position_{} {
+	position_{},
+	speed_{1.0f} {
 		if (parent != nullptr) {
-			parent->addChild(std::make_shared<Node>(*this));
-			depth_ += 1;
-			path_ = path_+"/"+name;
+			depth_ = parent_->getDepth() + 1;
+			path_ = parent_->getPath() +"/"+name;
 			}
 		else {
 			path_ = "/";
@@ -34,28 +35,9 @@ Node::Node(std::shared_ptr<Node> parent, std::string const& name) :
 
 	}
 
-Node::Node(std::shared_ptr<Node> parent, std::string const& name, int depth) : 
-	parent_{parent},
-	children_{},
-	name_{name},
-	depth_{depth},
-	path_{},
-	localTransform_{1.0f},
-	worldTransform_{1.0f},
-	position_{} {
-		if (parent != nullptr) {
-			parent->addChild(std::make_shared<Node>(*this));
-			path_ = path_+"/"+name;
-			}
-		else {
-			path_ = "/";
-
-		}
-
-	}
 
 
-std::shared_ptr<Node> Node::getParent(){
+std::shared_ptr<Node> Node::getParent() const{
 	return parent_;
 }
 
@@ -63,7 +45,7 @@ void Node::setParent(std::shared_ptr<Node> const& parent){
 	parent_ = parent;
 }
 
-std::vector<std::shared_ptr<Node>> const& Node::getChildrenList(){
+std::vector<std::shared_ptr<Node>> Node::getChildrenList() const{
 	return children_;
 }
 
@@ -97,7 +79,7 @@ void Node::setLocalTransform(glm::mat4 const& transform){
 	localTransform_ = transform;
 }
 
-glm::mat4 Node::getWorldTransform(){
+glm::mat4 Node::getWorldTransform() const{
 	return worldTransform_;
 }
 
@@ -142,3 +124,33 @@ glm::fvec3 Node::getPosition() const{
 	return position_;
 
 }
+
+
+void Node::setSpeed(float speed){
+	speed_ = speed;
+}
+
+
+float Node::getSpeed() const{
+	return speed_;
+
+}
+
+
+std::ostream& Node::print(std::ostream& os) const{
+    os << "name: " << name_ << "\n"
+    << "path: " << path_ << "\n"
+    << "Parent: " << parent_ -> getName() << "\n" 
+    << "children: ";
+    for(auto const& i: children_){
+        os << i -> name_ <<", ";
+    } 
+    os << "\n"
+    << "depth: " << depth_ << "\n";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, Node const& n){
+    return n.print(os);
+}
+

@@ -27,7 +27,7 @@ class ApplicationSolar : public Application {
 
   // Function that creates planets (by hand)
   void createPlanetSystem() const;
-  void drawGraph(std::shared_ptr<Node> node) const;
+  void drawGraph(std::vector<std::shared_ptr<Node>> children) const;
 
  protected:
   void initializeShaderPrograms();

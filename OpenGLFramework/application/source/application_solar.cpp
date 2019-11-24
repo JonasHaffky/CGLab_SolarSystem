@@ -62,94 +62,185 @@ void ApplicationSolar::render() const {
 
 }
 
+
 void ApplicationSolar::createPlanetSystem() const{
 
-  //std::cout<<"1"<<std::endl;
   // we load a circular model from the resources
   model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
-  
 
-
-
-  //std::cout<<"2"<<std::endl;
   // creating an empty root node with nullptr as parent, named /, path / and 0 depth
-  Node root{nullptr, "/", 0};
+  Node root{nullptr, "/"};
   auto root_pointer = std::make_shared<Node>(root);
   SceneGraph scene = SceneGraph("scene", root_pointer);
 
 
-  //std::cout<<"3"<<std::endl;
-  //Creating our first star -> the sun! And adding to the root
-  GeometryNode sun{root_pointer, "sun", 1}; 
-
-
+  //Creating our first star -> the sun, and adding to the root
+  GeometryNode sun{root_pointer, "sun"}; 
   sun.setGeometry(planet_model);
-  //set a transformation for the sun and make a pointer
+  //set a transformation for the sun and make into pointer and adding to root
   sun.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
                                    0.0f, 1.0f, 0.0f, 0.0f,
                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                   0.0f, 0.0f, 0.0f, 1.0f}); //last element for size
-  sun.setPosition({1.0f, 1.0f, -1.0f});
+                                   0.0f, 0.0f, 0.0f, 3.0f}); //last element for size
+  sun.setPosition({0.0f, 0.0f, 0.0f});
   auto sun_pointer = std::make_shared<GeometryNode>(sun);
+  root_pointer->addChild(sun_pointer);
 
-
-
-  GeometryNode merkury{root_pointer,"merkury", 1};
+  GeometryNode merkury{root_pointer, "merkury"}; 
   merkury.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
   merkury.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                      0.0f, 1.0f, 0.0f, 0.0f,
-                                      0.0f, 0.0f, 1.0f, 0.0f, 
-                                      0.0f, 0.0f, 0.0f, 1.0f}); //last element for size
-  merkury.setPosition(glm::fvec3{1.0f, 1.0f, -1.0f});
-
-
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 20.0f}); //last element for size
+  merkury.setPosition({11.0f, 0.0f, 0.0f});
+  merkury.setSpeed(1.2f); //high number --> faster because multiplied with time in render
   auto merkury_pointer = std::make_shared<GeometryNode>(merkury);
 
+  root_pointer->addChild(merkury_pointer);
 
-  GeometryNode earth{sun_pointer,"earth", 2};
+
+  GeometryNode venus{root_pointer, "venus"}; 
+  venus.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  venus.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 17.0f}); //last element for size
+  venus.setPosition({13.0f, 0.0f, 0.0f});
+  venus.setSpeed(1.0f); 
+  auto venus_pointer = std::make_shared<GeometryNode>(venus);
+  root_pointer->addChild(venus_pointer);
+
+  GeometryNode earth{root_pointer, "earth"}; 
   earth.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
   earth.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                      0.0f, 1.0f, 0.0f, 0.0f,
-                                      0.0f, 0.0f, 1.0f, 0.0f, 
-                                      0.0f, 0.0f, 0.0f, 2.0f}); //last element for size
-  earth.setPosition(glm::fvec3{1.0f, 1.0f, -1.0f});
-
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 15.0f}); //last element for size
+  earth.setPosition({14.0f, 0.0f, 0.0f});
+  earth.setSpeed(1.2f);
   auto earth_pointer = std::make_shared<GeometryNode>(earth);
+  root_pointer->addChild(earth_pointer);
 
-  merkury_pointer->addChild(earth_pointer);
 
-  //std::cout<<sun_pointer->getChildrenList().size()<<std::endl;
+  GeometryNode moon{earth_pointer, "moon"}; 
+  moon.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  moon.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 2.0f}); //last element for size
+  moon.setPosition({4.0f, 0.0f, 0.0f});
+  moon.setSpeed(1.8f);
+  auto moon_pointer = std::make_shared<GeometryNode>(moon);
+  earth_pointer->addChild(moon_pointer);
+
+  
+  GeometryNode mars{root_pointer, "mars"}; 
+  mars.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  mars.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 15.0f}); //last element for size
+  mars.setPosition({15.0f, 0.0f, 0.0f});
+  mars.setSpeed(0.1f);
+  auto mars_pointer = std::make_shared<GeometryNode>(mars);
+  root_pointer->addChild(mars_pointer);
+
+  
+  GeometryNode jupiter{root_pointer, "jupiter"}; 
+  jupiter.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  jupiter.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 7.0f}); //last element for size
+  jupiter.setPosition({11.0f, 0.0f, 0.0f});
+  jupiter.setSpeed(0.3f);
+  auto jupiter_pointer = std::make_shared<GeometryNode>(jupiter);
+  root_pointer->addChild(jupiter_pointer);
+
+
+  GeometryNode saturn{root_pointer, "saturn"}; 
+  saturn.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  saturn.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 10.0f}); //last element for size
+  saturn.setPosition({16.0f, 0.0f, 0.0f});
+  saturn.setSpeed(0.8f);
+  auto saturn_pointer = std::make_shared<GeometryNode>(saturn);
+  root_pointer->addChild(saturn_pointer);
+
+
+  GeometryNode uranus{root_pointer, "uranus"}; 
+  uranus.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  uranus.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 12.0f}); //last element for size
+  uranus.setPosition({28.0f, 0.0f, 0.0f});
+  uranus.setSpeed(0.4f);
+  auto uranus_pointer = std::make_shared<GeometryNode>(uranus);
+  root_pointer->addChild(uranus_pointer);
+
+  
+  GeometryNode neptune{root_pointer, "neptune"}; 
+  neptune.setGeometry(planet_model);
+  //set a transformation for the sun and make a pointer
+  neptune.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                   0.0f, 1.0f, 0.0f, 0.0f,
+                                   0.0f, 0.0f, 1.0f, 0.0f, 
+                                   0.0f, 0.0f, 0.0f, 13.0f}); //last element for size
+  neptune.setPosition({34.0f, 0.0f, 0.0f});
+  neptune.setSpeed(0.1f);
+  auto neptune_pointer = std::make_shared<GeometryNode>(neptune);
+  root_pointer->addChild(neptune_pointer);
+
 
   scene.printGraph();
-  drawGraph(root_pointer);
+  drawGraph(root_pointer->getChildrenList());
 }
 
-void ApplicationSolar::drawGraph(std::shared_ptr<Node> node) const{
+void ApplicationSolar::drawGraph(std::vector<std::shared_ptr<Node>> children) const{
   //std::cout<<merkury_pointer->hasChild("earth")<<std::endl;
 
-  auto children = node->getChildrenList();
-  for (auto const& child : children) {
-    //std::cout<<child->getDepth()<<std::endl;
 
-    glm::fmat4 model_matrix = glm::fmat4{1.0};
-    model_matrix = glm::rotate(model_matrix * child->getLocalTransform(),float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
-    model_matrix = glm::translate(model_matrix, child->getPosition());;
+  if (children.size()>0){
+    for (auto const& child : children) {
 
-    //std::cout<<"5"<<std::endl;
-    // extra matrix for normal transformation to keep them orthogonal to surface
-    glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
-    glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
-                       1, GL_FALSE, glm::value_ptr(model_matrix));
+        glm::fmat4 model_matrix = glm::fmat4{1.0};
+        if(child->getDepth() >= 2){
+            model_matrix = child->getParent()->getLocalTransform();
+            model_matrix = glm::rotate(model_matrix, float(glfwGetTime())*(child->getParent()->getSpeed()), glm::fvec3{0.0f, 1.0f, 0.0f});
+            model_matrix = glm::translate(model_matrix, child->getParent()->getPosition());
+        }
+        model_matrix = glm::rotate(model_matrix * child->getLocalTransform(),float(glfwGetTime()) * child->getSpeed(), glm::fvec3{0.0f, 1.0f, 0.0f});
+        model_matrix = glm::translate(model_matrix, child->getPosition());;
 
-    glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
-                       1, GL_FALSE, glm::value_ptr(normal_matrix));
+        // extra matrix for normal transformation to keep them orthogonal to surface
+        glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
+        glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
+                           1, GL_FALSE, glm::value_ptr(model_matrix));
 
-    // bind the VAO to draw
-    glBindVertexArray(planet_object.vertex_AO);
+        glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
+                           1, GL_FALSE, glm::value_ptr(normal_matrix));
 
-    // draw bound vertex array using bound shader
-    glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
-  }
+        // bind the VAO to draw
+        glBindVertexArray(planet_object.vertex_AO);
+
+        // draw bound vertex array using bound shader
+        glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+        if(child->getChildrenList().size()>0) {
+          drawGraph(child->getChildrenList());
+        }
+      }
+    }
 }
 
 void ApplicationSolar::uploadView() {
