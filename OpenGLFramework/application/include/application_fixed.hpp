@@ -8,6 +8,7 @@ class ApplicationFixed : public Application {
  public:
   // allocate and initialize objects
   ApplicationFixed(std::string const& resource_path);
+  //test
 
 
   // draw all objects
